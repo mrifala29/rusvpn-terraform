@@ -17,9 +17,9 @@ Proyek ini bertujuan untuk membangun infrastruktur VPN (Exit Node) mandiri yang 
 ### In-Scope:
 * Pembuatan script *Infrastructure as Code (IaC)* menggunakan **Terraform**.
 * Provisioning 5 instance AWS EC2 (`t3.micro`) di 5 region AWS berbeda.
-* Konfigurasi Security Group untuk SSH (TCP 22) dan VPN port (UDP).
+* Konfigurasi Security Group untuk SSH (TCP 22) dan VPN port (UDP 1194, atau sesuai kebutuhan OpenVPN).
 * Alokasi *Elastic IP* (EIP) pada tiap EC2 untuk memastikan IP publik bersifat statis.
-* Instalasi dan konfigurasi otomatis VPN Engine (rekomendasi: **WireGuard**) melalui *EC2 User Data*.
+* Persiapan server (misalnya instalasi Docker & Docker Compose) via *EC2 User Data* agar siap di-deploy service OpenVPN.
 
 ### Out-of-Scope:
 * Interkoneksi internal antar VPN node (VPC Peering / Transit Gateway tidak dikonfigurasi).
@@ -38,11 +38,28 @@ Pemetaan region AWS berikut digunakan untuk mewakili 5 benua secara optimal:
 
 ## 5. Keamanan & Akses (Security Requirements)
 * **Akses SSH (Port 22 TCP):** Wajib dibatasi (*whitelisted*) hanya untuk *IP Public* Kantor Jakarta atau bastion host perusahaan.
-* **Akses VPN (Port 51820 UDP - WireGuard):** Dibuka untuk koneksi klien (`0.0.0.0/0`) atau disesuaikan dengan kebijakan keamanan Antigravity.
-* **Otentikasi:** Menggunakan SSH Key Pair standar perusahaan untuk akses server, dan *Public/Private Key pair* WireGuard untuk akses VPN.
+* **Akses VPN (Port 1194 UDP - OpenVPN):** Dibuka untuk koneksi klien (`0.0.0.0/0`) atau disesuaikan dengan kebijakan keamanan Antigravity.
+* **Otentikasi:** Menggunakan SSH Key Pair standar perusahaan untuk akses server. Otentikasi VPN dikelola terpisah di level aplikasi (OpenVPN).
 
 ## 6. Rencana Eksekusi (Milestones)
-1. **Fase 1: Persiapan Script (Terraform)** - Penulisan `main.tf` dengan *provider aliases* (untuk multi-region) dan penyusunan skrip bash instalasi WireGuard (User Data).
+1. **Fase 1: Persiapan Script (Terraform)** - Penulisan `main.tf` dengan *provider aliases* (untuk multi-region) dan penyusunan skrip bash persiapan instance (Docker/Dependencies User Data).
 2. **Fase 2: Deployment via Antigravity** - Eksekusi pipeline `terraform plan` dan `terraform apply` di lingkungan Antigravity.
 3. **Fase 3: Testing & Validasi** - Pembuatan konfigurasi *client*, lalu pengujian koneksi dari Jakarta ke 5 node secara bergantian. Pengecekan perubahan IP publik (misal: via *whatismyip.com*).
 4. **Fase 4: Handover** - Penyerahan kredensial/file konfigurasi (`.conf`) VPN kepada Product Manager (PM) / Atasan.
+
+## 7. Struktur Direktori Proyek (Terraform)
+Sesuai dengan standar best-practice, implementasi ini menggunakan struktur direktori berikut:
+
+```text
+terraform/
+├── environments/
+│   ├── prod/                   # Entrypoint utama untuk deployment ke 5 region
+│   │   ├── main.tf             # Definisi 5 AWS provider & pemanggilan module vpc/ec2
+│   │   ├── variables.tf        # Deklarasi variabel
+│   │   ├── terraform.tfvars    # Nilai variabel (contoh: IP Jakarta)
+│   │   └── outputs.tf          # Mengekspor 5 Public IP (EIP)
+│   └── global/                 # (Opsional/Future) Tempat setup S3 Backend state
+└── modules/
+    ├── vpc/                    # Modul VPC, Subnet, IGW, Route Table mandiri
+    └── ec2/                    # Modul EC2, Security Group, EIP, dan User Data (Docker)
+```

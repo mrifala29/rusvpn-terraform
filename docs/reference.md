@@ -59,6 +59,7 @@ nama-proyek-terraform/
 - Setiap environment wajib memiliki *Remote State Backend* (contoh: Amazon S3) dan mekanisme *State Locking* (contoh: DynamoDB) untuk mencegah *concurrent modification*.
 - File `main.tf` di level environment sebisa mungkin hanya berisi kumpulan blok `module {}` yang mereferensikan direktori di `modules/`. Hindari mendefinisikan `resource` murni (seperti `aws_s3_bucket`) di sini kecuali terpaksa.
 - **Scaling & Toleransi**: Perbedaan arsitektur (contoh: `prod` pakai 3 AZ dan instance besar, `dev` hanya 1 AZ) murni dikontrol melalui variabel yang dipasok (`count`, `instance_type`, dll), bukan dengan menulis ulang modul.
+- **Environment Global (`environments/global/`)**: Direktori ini diperuntukkan khusus bagi resource yang berlaku lintas environment atau berada di level akun secara keseluruhan (tidak spesifik dev/prod). Contoh penerapannya adalah untuk IAM (Users, Groups, Roles), DNS Route53 Root Zone utama, CloudTrail, dan pembuatan S3 Bucket & DynamoDB untuk Terraform Remote State Backend itu sendiri.
 
 #### c. Penamaan Resource (Naming Convention)
 - Gunakan tag standar di setiap resource minimal mencakup: `Environment`, `Project`, dan `ManagedBy = "Terraform"`.
