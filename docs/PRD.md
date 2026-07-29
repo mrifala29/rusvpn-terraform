@@ -37,9 +37,9 @@ Pemetaan region AWS berikut digunakan untuk mewakili 5 benua secara optimal:
 | Australia | `ap-southeast-2` (Sydney) | t3.micro | Ubuntu 22.04 LTS |
 
 ## 5. Keamanan & Akses (Security Requirements)
-* **Akses SSH (Port 22 TCP):** Wajib dibatasi (*whitelisted*) hanya untuk *IP Public* Kantor Jakarta atau bastion host perusahaan.
-* **Akses VPN (Port 1194 UDP - OpenVPN):** Dibuka untuk koneksi klien (`0.0.0.0/0`) atau disesuaikan dengan kebijakan keamanan Antigravity.
-* **Otentikasi:** Menggunakan SSH Key Pair standar perusahaan untuk akses server. Otentikasi VPN dikelola terpisah di level aplikasi (OpenVPN).
+* **Akses SSH (Port 22 TCP):** Terbuka sementara (`0.0.0.0/0`) karena belum ada IP spesifik (dapat dibatasi kemudian via variabel `jakarta_office_ip`).
+* **Akses VPN (Port 1194 UDP - OpenVPN):** Dibuka untuk koneksi klien (`0.0.0.0/0`).
+* **Otentikasi:** SSH Key Pair dibuat secara otomatis dan dinamis oleh Terraform (tidak perlu *Key Pair* bawaan AWS). Kunci *private* akan diekspor via *output* Terraform. Otentikasi VPN dikelola di level aplikasi.
 
 ## 6. Rencana Eksekusi (Milestones)
 1. **Fase 1: Persiapan Script (Terraform)** - Penulisan `main.tf` dengan *provider aliases* (untuk multi-region) dan penyusunan skrip bash persiapan instance (Docker/Dependencies User Data).
