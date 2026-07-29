@@ -136,7 +136,6 @@ module "ec2_aus" {
   vpc_id            = module.vpc_aus.vpc_id
   subnet_id         = module.vpc_aus.public_subnet_id
   jakarta_office_ip = var.jakarta_office_ip
-  key_name          = var.key_name
   instance_type     = var.instance_type
   environment       = var.environment
   project           = var.project
