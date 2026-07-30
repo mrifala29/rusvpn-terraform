@@ -8,9 +8,5 @@ output "instance_id" {
   value       = aws_instance.vpn.id
 }
 
-output "private_key_pem" {
-  description = "The generated private key for SSH access"
-  value       = tls_private_key.ssh.private_key_pem
-  sensitive   = true
-}
+
 

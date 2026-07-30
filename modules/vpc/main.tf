@@ -17,6 +17,7 @@ resource "aws_vpc" "main" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
+    TagID       = "rusvpn-dev"
   }
 }
 
@@ -28,6 +29,7 @@ resource "aws_internet_gateway" "main" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
+    TagID       = "rusvpn-dev"
   }
 }
 
@@ -41,6 +43,7 @@ resource "aws_subnet" "public" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
+    TagID       = "rusvpn-dev"
   }
 }
 
@@ -57,6 +60,7 @@ resource "aws_route_table" "public" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
+    TagID       = "rusvpn-dev"
   }
 }
 

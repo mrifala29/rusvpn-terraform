@@ -35,3 +35,8 @@ variable "region_name" {
   description = "Name alias for the region (e.g., asia, europe)"
   type        = string
 }
+
+variable "public_key" {
+  description = "SSH public key content to inject into EC2 instances"
+  type        = string
+}

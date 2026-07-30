@@ -47,3 +47,8 @@ variable "vpc_cidr_aus" {
   type    = string
   default = "10.14.0.0/16"
 }
+
+variable "public_key" {
+  description = "SSH public key content for all EC2 instances"
+  type        = string
+}

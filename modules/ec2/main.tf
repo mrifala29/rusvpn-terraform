@@ -4,10 +4,6 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 5.0"
     }
-    tls = {
-      source  = "hashicorp/tls"
-      version = ">= 4.0"
-    }
   }
 }
 
@@ -27,14 +23,9 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "tls_private_key" "ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
 resource "aws_key_pair" "vpn" {
   key_name   = "${var.project}-${var.environment}-${var.region_name}-key"
-  public_key = tls_private_key.ssh.public_key_openssh
+  public_key = var.public_key
 }
 
 resource "aws_security_group" "vpn" {
@@ -70,6 +61,7 @@ resource "aws_security_group" "vpn" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
+    TagID       = "rusvpn-dev"
   }
 }
 
@@ -88,6 +80,7 @@ resource "aws_instance" "vpn" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
+    TagID       = "rusvpn-dev"
   }
 }
 
@@ -100,5 +93,6 @@ resource "aws_eip" "vpn" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
+    TagID       = "rusvpn-dev"
   }
 }

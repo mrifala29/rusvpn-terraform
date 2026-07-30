@@ -32,6 +32,7 @@ module "ec2_asia" {
   environment       = var.environment
   project           = var.project
   region_name       = "asia"
+  public_key        = var.public_key
 }
 
 # 2. North America (N. Virginia)
@@ -59,6 +60,7 @@ module "ec2_na" {
   environment       = var.environment
   project           = var.project
   region_name       = "na"
+  public_key        = var.public_key
 }
 
 # 3. Europe (Frankfurt)
@@ -86,6 +88,7 @@ module "ec2_eu" {
   environment       = var.environment
   project           = var.project
   region_name       = "eu"
+  public_key        = var.public_key
 }
 
 # 4. South America (São Paulo)
@@ -113,6 +116,7 @@ module "ec2_sa" {
   environment       = var.environment
   project           = var.project
   region_name       = "sa"
+  public_key        = var.public_key
 }
 
 # 5. Australia (Sydney)
@@ -140,4 +144,5 @@ module "ec2_aus" {
   environment       = var.environment
   project           = var.project
   region_name       = "aus"
+  public_key        = var.public_key
 }
