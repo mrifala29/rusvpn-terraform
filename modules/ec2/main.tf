@@ -61,7 +61,7 @@ resource "aws_security_group" "vpn" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
-    TagID       = "rusvpn-dev"
+    Owner       = "RND-Rival"
   }
 }
 
@@ -80,7 +80,7 @@ resource "aws_instance" "vpn" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
-    TagID       = "rusvpn-dev"
+    Owner       = "RND-Rival"
   }
 }
 
@@ -93,6 +93,6 @@ resource "aws_eip" "vpn" {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "Terraform"
-    TagID       = "rusvpn-dev"
+    Owner       = "RND-Rival"
   }
 }

@@ -33,3 +33,6 @@ terraform.rc
 # Ignore private SSH keys
 *.pem
 modules/ec2/user_data.sh
+
+# System
+.DS_Store
