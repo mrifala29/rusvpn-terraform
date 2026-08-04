@@ -26,6 +26,14 @@ data "aws_ami" "ubuntu" {
 resource "aws_key_pair" "vpn" {
   key_name   = "${var.project}-${var.environment}-${var.region_name}-key"
   public_key = var.public_key
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-${var.region_name}-key"
+    Environment = var.environment
+    Project     = var.project
+    ManagedBy   = "Terraform"
+    Owner       = "RND-Rival"
+  }
 }
 
 resource "aws_security_group" "vpn" {
