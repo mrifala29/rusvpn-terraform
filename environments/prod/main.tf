@@ -33,6 +33,7 @@ module "ec2_asia" {
   project           = var.project
   region_name       = "asia"
   public_key        = var.public_key
+  backend_ip        = var.backend_ip
 }
 
 # 2. North America (N. Virginia)
@@ -61,6 +62,7 @@ module "ec2_na" {
   project           = var.project
   region_name       = "na"
   public_key        = var.public_key
+  backend_ip        = var.backend_ip
 }
 
 # 3. Europe (Frankfurt)
@@ -89,6 +91,7 @@ module "ec2_eu" {
   project           = var.project
   region_name       = "eu"
   public_key        = var.public_key
+  backend_ip        = var.backend_ip
 }
 
 # 4. South America (São Paulo)
@@ -117,6 +120,7 @@ module "ec2_sa" {
   project           = var.project
   region_name       = "sa"
   public_key        = var.public_key
+  backend_ip        = var.backend_ip
 }
 
 # 5. Australia (Sydney)
@@ -145,4 +149,5 @@ module "ec2_aus" {
   project           = var.project
   region_name       = "aus"
   public_key        = var.public_key
+  backend_ip        = var.backend_ip
 }

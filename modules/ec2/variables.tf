@@ -1,42 +1,36 @@
 variable "vpc_id" {
-  description = "VPC ID where the EC2 will be deployed"
-  type        = string
+  type = string
 }
 
 variable "subnet_id" {
-  description = "Subnet ID where the EC2 will be deployed"
-  type        = string
+  type = string
 }
 
 variable "jakarta_office_ip" {
-  description = "IP address of the Jakarta office for SSH whitelisting (CIDR format)"
-  type        = string
+  type = string
 }
 
-
 variable "instance_type" {
-  description = "EC2 Instance Type"
-  type        = string
-  default     = "t3.micro"
+  type = string
 }
 
 variable "environment" {
-  description = "Environment name (e.g., prod)"
-  type        = string
+  type = string
 }
 
 variable "project" {
-  description = "Project name"
-  type        = string
-  default     = "rusvpn"
+  type = string
 }
 
 variable "region_name" {
-  description = "Name alias for the region (e.g., asia, europe)"
-  type        = string
+  type = string
 }
 
 variable "public_key" {
-  description = "SSH public key content to inject into EC2 instances"
-  type        = string
+  type = string
+}
+
+variable "backend_ip" {
+  type    = string
+  default = "0.0.0.0/0"
 }

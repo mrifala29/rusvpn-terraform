@@ -56,6 +56,13 @@ resource "aws_security_group" "vpn" {
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  # Provisioning Agent
+  ingress {
+    from_port   = 8443
+    to_port     = 8443
+    protocol    = "tcp"
+    cidr_blocks = [var.backend_ip]
+  }
 
   egress {
     from_port   = 0
@@ -82,6 +89,11 @@ resource "aws_instance" "vpn" {
   vpc_security_group_ids = [aws_security_group.vpn.id]
 
   user_data = file("${path.module}/user_data.sh")
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required" # Enforce IMDSv2
+  }
 
   tags = {
     Name        = "${var.project}-${var.environment}-${var.region_name}-vpn-node"
