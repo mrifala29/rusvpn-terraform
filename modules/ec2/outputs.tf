@@ -8,5 +8,8 @@ output "instance_id" {
   value       = aws_instance.vpn.id
 }
 
-
-
+output "agent_token" {
+  description = "The token for the provisioning agent"
+  value       = random_password.agent_token.result
+  sensitive   = true
+}

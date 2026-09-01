@@ -30,7 +30,7 @@ variable "public_key" {
   type = string
 }
 
-variable "backend_ip" {
-  type    = string
-  default = "0.0.0.0/0"
+variable "backend_ips" {
+  type    = list(string)
+  default = ["0.0.0.0/0"]
 }

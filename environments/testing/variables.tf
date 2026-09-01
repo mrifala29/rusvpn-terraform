@@ -4,6 +4,11 @@ variable "jakarta_office_ip" {
   default     = "0.0.0.0/0"
 }
 
+variable "backend_ip" {
+  description = "IP address of the backend service to access the provisioning agent (CIDR format)"
+  type        = string
+  default     = "0.0.0.0/0"
+}
 
 variable "instance_type" {
   description = "EC2 Instance Type"
@@ -21,11 +26,6 @@ variable "project" {
   description = "Project name"
   type        = string
   default     = "rusvpn"
-}
-
-variable "backend_ips" {
-  type    = list(string)
-  default = ["0.0.0.0/0"]
 }
 
 variable "vpc_cidr_asia" {

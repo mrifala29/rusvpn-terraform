@@ -61,7 +61,7 @@ resource "aws_security_group" "vpn" {
     from_port   = 8443
     to_port     = 8443
     protocol    = "tcp"
-    cidr_blocks = [var.backend_ip]
+    cidr_blocks = var.backend_ips
   }
 
   egress {
@@ -88,7 +88,14 @@ resource "aws_instance" "vpn" {
 
   vpc_security_group_ids = [aws_security_group.vpn.id]
 
-  user_data = file("${path.module}/user_data.sh")
+  user_data = <<-EOF
+#!/bin/bash
+export ENVIRONMENT="${var.environment}"
+export REGION_NAME="${var.region_name}"
+export AGENT_TOKEN="${random_password.agent_token.result}"
+
+${replace(file("${path.module}/user_data.sh"), "#!/bin/bash\n", "")}
+EOF
 
   metadata_options {
     http_endpoint = "enabled"
@@ -115,4 +122,43 @@ resource "aws_eip" "vpn" {
     ManagedBy   = "Terraform"
     Owner       = "RND-Rival"
   }
+}
+
+resource "random_password" "agent_token" {
+  length  = 32
+  special = false
+}
+
+resource "aws_ssm_parameter" "agent_token" {
+  name  = "/rusvpn/${var.environment}/${var.region_name}/agent-token"
+  type  = "SecureString"
+  value = random_password.agent_token.result
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-${var.region_name}-agent-token"
+    Environment = var.environment
+    Project     = var.project
+    ManagedBy   = "Terraform"
+    Owner       = "RND-Rival"
+  }
+}
+
+resource "aws_ebs_volume" "pki" {
+  availability_zone = aws_instance.vpn.availability_zone
+  size              = 1
+  type              = "gp3"
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-${var.region_name}-pki-volume"
+    Environment = var.environment
+    Project     = var.project
+    ManagedBy   = "Terraform"
+    Owner       = "RND-Rival"
+  }
+}
+
+resource "aws_volume_attachment" "pki" {
+  device_name = "/dev/sdf"
+  volume_id   = aws_ebs_volume.pki.id
+  instance_id = aws_instance.vpn.id
 }

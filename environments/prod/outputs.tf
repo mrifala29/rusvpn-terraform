@@ -22,3 +22,33 @@ output "vpn_ip_aus" {
   description = "Public IP for Australia (Sydney)"
   value       = module.ec2_aus.public_ip
 }
+
+output "vpn_token_asia" {
+  description = "Agent token for Asia"
+  value       = module.ec2_asia.agent_token
+  sensitive   = true
+}
+
+output "vpn_token_na" {
+  description = "Agent token for North America"
+  value       = module.ec2_na.agent_token
+  sensitive   = true
+}
+
+output "vpn_token_eu" {
+  description = "Agent token for Europe"
+  value       = module.ec2_eu.agent_token
+  sensitive   = true
+}
+
+output "vpn_token_sa" {
+  description = "Agent token for South America"
+  value       = module.ec2_sa.agent_token
+  sensitive   = true
+}
+
+output "vpn_token_aus" {
+  description = "Agent token for Australia"
+  value       = module.ec2_aus.agent_token
+  sensitive   = true
+}
