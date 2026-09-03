@@ -27,7 +27,13 @@ variable "region_name" {
 }
 
 variable "public_key" {
-  type = string
+  description = "SSH public key content"
+  type        = string
+}
+
+variable "node_domain" {
+  description = "The DNS domain name for this node (e.g., rusvpn-asia.linkit360.ai)"
+  type        = string
 }
 
 variable "backend_ips" {

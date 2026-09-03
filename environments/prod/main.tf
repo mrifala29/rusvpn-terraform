@@ -34,6 +34,7 @@ module "ec2_asia" {
   region_name       = "asia"
   public_key        = var.public_key
   backend_ips       = var.backend_ips
+  node_domain       = "rusvpn-asia.linkit360.ai"
 }
 
 # 2. North America (N. Virginia)
@@ -63,6 +64,7 @@ module "ec2_na" {
   region_name       = "na"
   public_key        = var.public_key
   backend_ips       = var.backend_ips
+  node_domain       = "rusvpn-na.linkit360.ai"
 }
 
 # 3. Europe (Frankfurt)
@@ -92,6 +94,7 @@ module "ec2_eu" {
   region_name       = "eu"
   public_key        = var.public_key
   backend_ips       = var.backend_ips
+  node_domain       = "rusvpn-eu.linkit360.ai"
 }
 
 # 4. South America (São Paulo)
@@ -121,6 +124,7 @@ module "ec2_sa" {
   region_name       = "sa"
   public_key        = var.public_key
   backend_ips       = var.backend_ips
+  node_domain       = "rusvpn-sa.linkit360.ai"
 }
 
 # 5. Australia (Sydney)
@@ -150,4 +154,5 @@ module "ec2_aus" {
   region_name       = "aus"
   public_key        = var.public_key
   backend_ips       = var.backend_ips
+  node_domain       = "rusvpn-aus.linkit360.ai"
 }

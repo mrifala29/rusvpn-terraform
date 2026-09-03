@@ -49,11 +49,19 @@ resource "aws_security_group" "vpn" {
     cidr_blocks = [var.jakarta_office_ip]
   }
 
-  # OpenVPN UDP
+  # OpenVPN
   ingress {
     from_port   = 1194
     to_port     = 1194
     protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Certbot Let's Encrypt (HTTP-01 Challenge)
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
   # Provisioning Agent
@@ -93,6 +101,7 @@ resource "aws_instance" "vpn" {
 export ENVIRONMENT="${var.environment}"
 export REGION_NAME="${var.region_name}"
 export AGENT_TOKEN="${random_password.agent_token.result}"
+export NODE_DOMAIN="${var.node_domain}"
 
 ${replace(file("${path.module}/user_data.sh"), "#!/bin/bash\n", "")}
 EOF
@@ -112,16 +121,16 @@ EOF
 }
 
 resource "aws_eip" "vpn" {
-  instance = aws_instance.vpn.id
-  domain   = "vpc"
+  domain = "vpc"
 
   tags = {
-    Name        = "${var.project}-${var.environment}-${var.region_name}-eip"
-    Environment = var.environment
-    Project     = var.project
-    ManagedBy   = "Terraform"
-    Owner       = "RND-Rival"
+    Name = "rusvpn-${var.environment}-${var.region_name}-eip"
   }
+}
+
+resource "aws_eip_association" "vpn" {
+  instance_id   = aws_instance.vpn.id
+  allocation_id = aws_eip.vpn.id
 }
 
 resource "random_password" "agent_token" {
@@ -129,19 +138,7 @@ resource "random_password" "agent_token" {
   special = false
 }
 
-resource "aws_ssm_parameter" "agent_token" {
-  name  = "/rusvpn/${var.environment}/${var.region_name}/agent-token"
-  type  = "SecureString"
-  value = random_password.agent_token.result
 
-  tags = {
-    Name        = "${var.project}-${var.environment}-${var.region_name}-agent-token"
-    Environment = var.environment
-    Project     = var.project
-    ManagedBy   = "Terraform"
-    Owner       = "RND-Rival"
-  }
-}
 
 resource "aws_ebs_volume" "pki" {
   availability_zone = aws_instance.vpn.availability_zone
